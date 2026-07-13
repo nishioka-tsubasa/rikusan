@@ -9,11 +9,23 @@ Date: 2026-07-13
 | Staging | ai119.secure.ne.jp | `/html` | `/html/cms` |
 | Production | rikusan.sakura.ne.jp | `/home/rikusan/www` | `/home/rikusan/www/cms` |
 
+## Current Staging Check
+
+- FTP/FTPS access works.
+- Staging WordPress core is `5.2.21`.
+- Production WordPress core is `5.0.22`.
+- Both environments use the Tracks theme `1.60`.
+- Staging is not currently a full match for production. Production has plugins such as `mw-wp-form`, `autoptimize`, `invisible-recaptcha`, `protect-uploads`, and others that were not present in the first staging plugin list.
+- `https://ai119.secure.ne.jp/`, `/index.php`, `/cms/`, and `/cms/readme.html` do not expose the WordPress site for browser verification. The staging public URL or host mapping is still required.
+- Staging SiteGuard login rewrite found: `/cms/login_z76c9dmu`.
+
 ## PHP Constraint
 
 Production is currently intended to remain on PHP 7.4.33.
 
 WordPress 7.0 supports PHP 7.4, but some current plugin versions require PHP 8.0+. MW WP Form is the main compatibility point to verify before production changes.
+
+The Japanese WordPress package API currently offers `wordpress-7.0.1.zip` with a PHP minimum of `7.4`.
 
 ## Required Before Production Work
 

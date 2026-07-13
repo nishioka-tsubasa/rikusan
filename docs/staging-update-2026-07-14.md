@@ -223,11 +223,55 @@ Final public checks returned 200:
 
 `/order-form/` still redirects to `/`, matching earlier staging behavior.
 
-Known remaining log warnings:
-
-- The customized Tracks theme logs PHP warnings for undefined constant `id` in `page-light.php` and `page-design.php` under PHP 7.4.
-- All-in-One WP Migration logs a warning in its updater.
-
-These were warnings, not fatal errors, during the follow-up QA.
-
 The temporary WordPress update maintenance PHP file was removed after verification.
+
+## Follow-up: PHP Warning Fixes
+
+Date: 2026-07-14 JST
+
+The PHP warnings found after the WordPress 7.0.1/PHP 7.4 staging update were fixed on staging.
+
+Backups created before the changes:
+
+- `/usr/home/ai119lrhtx/html/_codex_update_backups/20260714-warning-fix-page-light.php`
+- `/usr/home/ai119lrhtx/html/_codex_update_backups/20260714-warning-fix-page-design.php`
+- `/usr/home/ai119lrhtx/html/_codex_update_backups/20260714-warning-fix-class-ai1wm-updater.php`
+
+### Customized Tracks Theme
+
+Fixed undefined constant warnings caused by unquoted array keys:
+
+- `/html/cms/wp-content/themes/tracks/page-light.php`
+  - `$light_item1[id]` to `$light_item1['id']`
+  - `$light_item2[id]` to `$light_item2['id']`
+- `/html/cms/wp-content/themes/tracks/page-design.php`
+  - `$design_item[id]` to `$design_item['id']`
+
+### All-in-One WP Migration
+
+Fixed the updater warning by initializing the plugin update transient before assigning to `$transient->response`.
+
+File changed:
+
+- `/html/cms/wp-content/plugins/all-in-one-wp-migration/lib/model/class-ai1wm-updater.php`
+
+Note: this is a small compatibility patch to an old plugin version. It may be overwritten if All-in-One WP Migration is updated later.
+
+### Warning Fix QA
+
+Syntax checks passed for all changed PHP files before upload:
+
+- `page-light.php`
+- `page-design.php`
+- `class-ai1wm-updater.php`
+
+Post-fix checks returned 200:
+
+- `/`
+- `/light/`
+- `/design/`
+- `/wp-json/wp/v2/pages/58`
+- `/wp-json/contact-form-7/v1`
+- `/cms/wp-cron.php`
+
+After the post-fix checks, the staging error log had no new `Tue Jul 14 07:` entries, so the previous theme and All-in-One WP Migration warnings did not recur during QA.

@@ -82,3 +82,40 @@ All checked endpoints returned 200:
 2. Do not update the customized Tracks theme directly without first moving customizations into a child theme or custom plugin.
 3. Do not update MetaSlider beyond `3.10.2` on PHP 7.0; it failed in this environment.
 4. For production, test against an environment matching production PHP `7.4.33` before applying WordPress 7.x.
+
+## Follow-up: PHP 7.4 Switch
+
+Date: 2026-07-14 JST
+
+The staging root and WordPress `.htaccess` files were updated with:
+
+`AddHandler x-httpd-php74 .php`
+
+Backups created before the change:
+
+- `/usr/home/ai119lrhtx/html/_codex_update_backups/20260714-php74-root-htaccess-before`
+- `/usr/home/ai119lrhtx/html/_codex_update_backups/20260714-php74-cms-htaccess-before`
+
+Confirmed versions:
+
+- Staging before switch: PHP `7.0.32`
+- Staging after switch: PHP `7.4.28`
+- Production observed version: PHP `7.4.33`
+
+Post-switch smoke checks returned 200:
+
+- `/`
+- `/profile/`
+- `/office/`
+- `/light/`
+- `/design/`
+- `/etc/`
+- `/guide/`
+- `/links/`
+- `/privacy/`
+- `/information/?cat=1`
+- `/recruit/`
+- `/cms/login_z76c9dmu`
+- `/wp-json/wp/v2/pages/58`
+
+The temporary PHP 7.4 probe directory was removed after verification.

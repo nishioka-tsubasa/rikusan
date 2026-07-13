@@ -12,9 +12,9 @@ Date: 2026-07-13
 ## Current Staging Check
 
 - FTP/FTPS access works.
-- Staging WordPress core is `5.2.21`.
+- Staging WordPress core was updated to `7.0.1` after switching staging PHP to `7.4.28`.
 - Production WordPress core is `5.0.22`.
-- Both environments use the Tracks theme `1.60`.
+- Staging currently uses the customized Tracks `1.60`-era theme. Official Tracks `1.81` was tested and rolled back because it removed site-specific files and caused theme image 404s.
 - Staging is not currently a full match for production. Production has plugins such as `mw-wp-form`, `autoptimize`, `invisible-recaptcha`, `protect-uploads`, and others that were not present in the first staging plugin list.
 - `https://ai119.secure.ne.jp/`, `/index.php`, `/cms/`, and `/cms/readme.html` do not expose the WordPress site for browser verification. The staging public URL or host mapping is still required.
 - Staging SiteGuard login rewrite found: `/cms/login_z76c9dmu`.
@@ -23,7 +23,9 @@ Date: 2026-07-13
 
 Production is currently intended to remain on PHP 7.4.33.
 
-WordPress 7.0 supports PHP 7.4, but some current plugin versions require PHP 8.0+. MW WP Form is the main compatibility point to verify before production changes.
+WordPress 7.0 supports PHP 7.4. Staging has been validated on PHP `7.4.28` with WordPress `7.0.1`, Contact Form 7 `6.1.6`, and MetaSlider `3.110.0`.
+
+Some current plugin versions require PHP 8.0+. MW WP Form is the main compatibility point to verify before production changes.
 
 The Japanese WordPress package API currently offers `wordpress-7.0.1.zip` with a PHP minimum of `7.4`.
 
@@ -32,8 +34,8 @@ The Japanese WordPress package API currently offers `wordpress-7.0.1.zip` with a
 - Full file backup.
 - Full database backup.
 - WordPress administrator account for staging and production.
-- Confirmation of the staging site URL and whether it should be overwritten with a production clone.
 - Maintenance window and rollback decision point.
+- Decision on Tracks theme handling: keep the customized theme as-is, or first migrate customizations into a child theme/custom plugin before updating Tracks.
 
 ## Staging Test Checklist
 

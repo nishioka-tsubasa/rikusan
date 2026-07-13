@@ -3,13 +3,13 @@
 Date: 2026-07-14 JST
 Target: http://rikusan.3d-showcase.net/
 
-## Important Constraint
+## Initial Constraint
 
-The staging server is running PHP `7.0.32`.
+The staging server was initially running PHP `7.0.32`.
 
 WordPress `7.0.1` requires PHP `7.4`, so staging could not be updated to WordPress 7.x without first changing the staging PHP version. I updated staging only to the highest practical range that works on PHP 7.0.
 
-This means staging is still not equivalent to production if production remains PHP `7.4.33`.
+Staging was later switched to PHP `7.4.28`, which is close enough to production PHP `7.4.33` for WordPress 7.x compatibility testing.
 
 ## Changes Applied
 
@@ -119,3 +119,115 @@ Post-switch smoke checks returned 200:
 - `/wp-json/wp/v2/pages/58`
 
 The temporary PHP 7.4 probe directory was removed after verification.
+
+## Follow-up: WordPress 7.0.1 And PHP 7.4-Compatible Updates
+
+Date: 2026-07-14 JST
+
+The following updates were tested after confirming staging was running PHP `7.4.28`.
+
+| Component | Before follow-up | Attempted/After | Result |
+|---|---:|---:|---|
+| WordPress core | 6.5.8 | 7.0.1 | Updated; DB upgrade completed |
+| Contact Form 7 | 5.7.7 | 6.1.6 | Updated |
+| MetaSlider | 3.10.2 | 3.110.0 | Updated successfully on PHP 7.4 |
+| Tracks theme | customized 1.60 | attempted official 1.81, rolled back | Official update removed site-specific assets |
+| MW WP Form | not present on staging | not updated | Current MW WP Form requires PHP 8.0 |
+
+Additional backups created on staging:
+
+- `/usr/home/ai119lrhtx/html/_codex_update_backups/20260714-062204-wp-admin`
+- `/usr/home/ai119lrhtx/html/_codex_update_backups/20260714-062205-wp-includes`
+- `/usr/home/ai119lrhtx/html/_codex_update_backups/20260714-062300-contact-form-7`
+- `/usr/home/ai119lrhtx/html/_codex_update_backups/20260714-062500-ml-slider`
+- `/usr/home/ai119lrhtx/html/_codex_update_backups/20260714-062612-tracks`
+- `/usr/home/ai119lrhtx/html/_codex_update_backups/20260714-062612-tracks-181-failed`
+
+### WordPress 7.0.1
+
+Core files were updated to WordPress `7.0.1`, and the WordPress database upgrade screen completed successfully.
+
+Confirmed after update:
+
+- `$wp_version = '7.0.1'`
+- `$wp_db_version = 61833`
+- Public generator tag reports `WordPress 7.0.1`
+
+### Contact Form 7 6.1.6
+
+Contact Form 7 was updated to `6.1.6`.
+
+Confirmed after update:
+
+- Plugin readme stable tag: `6.1.6`
+- Requires WordPress: `6.7`
+- Requires PHP: `7.4`
+- Public assets load with `ver=6.1.6`
+- `/wp-json/contact-form-7/v1` returns 200
+
+### MetaSlider 3.110.0
+
+MetaSlider was updated to `3.110.0`. The PHP 7.0 parse error seen in the earlier attempt did not recur under PHP `7.4.28`.
+
+Confirmed after update:
+
+- Plugin readme stable tag: `3.110.0`
+- Public assets load with `ver=3.110.0`
+- Top page renders the MetaSlider markup
+- Public page and REST smoke tests returned 200
+
+### Tracks 1.81
+
+Tracks official `1.81` was tested, but it removed the customized theme files and directories used by the site, including the custom `images/` directory and page templates.
+
+Observed breakage:
+
+- Theme images such as `rikusan-logo.png`, `lighting_bnr.png`, `design_bnr.png`, and `news-arrow.png` returned 404 after the official update.
+- Site-specific files such as `page-rikusan.php`, `page-light.php`, and `page-design.php` disappeared from the active theme directory.
+
+Action taken:
+
+- Official Tracks `1.81` was moved to the backup area as `20260714-062612-tracks-181-failed`.
+- The customized Tracks theme was restored from `20260714-062612-tracks`.
+- Theme image URLs returned 200 again after rollback.
+
+Tracks should not be updated in production until the site-specific customizations are moved into a child theme or otherwise preserved.
+
+## Final State After Follow-up
+
+| Component | Final staging state |
+|---|---:|
+| PHP | 7.4.28 |
+| WordPress core | 7.0.1 |
+| Contact Form 7 | 6.1.6 |
+| MetaSlider | 3.110.0 |
+| Tracks theme | customized 1.60-era theme restored |
+| What's New Generator | disabled; MU shortcode replacement active |
+
+Final public checks returned 200:
+
+- `/`
+- `/profile/`
+- `/office/`
+- `/light/`
+- `/design/`
+- `/etc/`
+- `/guide/`
+- `/links/`
+- `/privacy/`
+- `/information/?cat=1`
+- `/recruit/`
+- `/cms/login_z76c9dmu`
+- `/wp-json/wp/v2/pages/58`
+- `/wp-json/contact-form-7/v1`
+
+`/order-form/` still redirects to `/`, matching earlier staging behavior.
+
+Known remaining log warnings:
+
+- The customized Tracks theme logs PHP warnings for undefined constant `id` in `page-light.php` and `page-design.php` under PHP 7.4.
+- All-in-One WP Migration logs a warning in its updater.
+
+These were warnings, not fatal errors, during the follow-up QA.
+
+The temporary WordPress update maintenance PHP file was removed after verification.

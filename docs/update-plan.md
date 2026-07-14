@@ -23,9 +23,9 @@ Date: 2026-07-13
 
 Production is currently intended to remain on PHP 7.4.33.
 
-WordPress 7.0 supports PHP 7.4. Staging has been validated on PHP `7.4.28` with WordPress `7.0.1`, Contact Form 7 `6.1.6`, and MetaSlider `3.110.0`.
+WordPress 7.0 supports PHP 7.4. Staging has been validated on PHP `7.4.28` with WordPress `7.0.1`, Contact Form 7 `6.1.6`, MetaSlider `3.110.0`, and the production-only plugin set added for parity testing.
 
-Some current plugin versions require PHP 8.0+. MW WP Form is the main compatibility point to verify before production changes.
+Some current plugin versions require PHP 8.0+. MW WP Form latest requires PHP `8.0`, so the production candidate while staying on PHP `7.4` is MW WP Form `5.0.4`.
 
 The Japanese WordPress package API currently offers `wordpress-7.0.1.zip` with a PHP minimum of `7.4`.
 
@@ -36,6 +36,8 @@ The Japanese WordPress package API currently offers `wordpress-7.0.1.zip` with a
 - WordPress administrator account for staging and production.
 - Maintenance window and rollback decision point.
 - Decision on Tracks theme handling: keep the customized theme as-is, or first migrate customizations into a child theme/custom plugin before updating Tracks.
+- Do not reintroduce What's New Generator in production; keep the MU shortcode replacement approach used on staging.
+- Keep `sakura-rs-wp-ssl` environment-specific and verify SSL behavior on production after file updates.
 
 ## Staging Test Checklist
 

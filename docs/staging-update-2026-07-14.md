@@ -275,3 +275,87 @@ Post-fix checks returned 200:
 - `/cms/wp-cron.php`
 
 After the post-fix checks, the staging error log had no new `Tue Jul 14 07:` entries, so the previous theme and All-in-One WP Migration warnings did not recur during QA.
+
+## Follow-up: PHP 7.4-Compatible Plugin Set
+
+Date: 2026-07-14 JST
+
+Production-only plugins were added to staging where an official WordPress.org package was available, then old staging plugins were updated to the highest selected PHP `7.4`-compatible versions.
+
+### Version Selection Notes
+
+- MW WP Form latest `5.1.4` requires PHP `8.0`.
+- MW WP Form `5.0.4` was selected because its package metadata explicitly supports PHP `7.4`.
+- `whats-new-genarator` was not reintroduced. The vulnerable plugin remains disabled and the MU shortcode replacement remains active.
+- `sakura-rs-wp-ssl` is present at `1.4.0`, which is already the current package. It was not activated on staging because the staging site is HTTP and the plugin is SSL-environment-specific.
+- `remove-query-strings-from-static-resources` no longer appeared through the plugin information API, but its WordPress.org ZIP package for `1.4` was still available and was installed for parity testing.
+
+### Final Plugin Versions On Staging
+
+| Plugin | Final staging version | Active on staging |
+|---|---:|---|
+| Advanced Custom Fields | 6.8.5 | yes |
+| Akismet | 5.7 | no |
+| All In One WP Security | 5.4.9 | yes |
+| All-in-One WP Migration | 7.106 | yes |
+| All-in-One WP Migration File Extension | 1.5 | yes |
+| Autoptimize | 3.1.15.1 | yes |
+| Classic Editor | 1.7.0 | yes |
+| Contact Form 7 | 6.1.6 | yes |
+| Disable Google Fonts | 2.0 | yes |
+| Duplicate Post | 4.7 | yes |
+| Easy FancyBox | 2.3.20 | no |
+| ImageMagick Engine | 1.8.0 | yes |
+| Invisible reCaptcha | 1.2.3 | yes |
+| Limit Login Attempts | 1.7.2 | yes |
+| MetaSlider | 3.110.0 | yes |
+| MW WP Form | 5.0.4 | yes |
+| Protect Uploads | 0.7.0 | yes |
+| Raw HTML | 1.6.4 | yes |
+| Remove Query Strings From Static Resources | 1.4 | yes |
+| SAKURA RS WP SSL | 1.4.0 | no |
+| SiteGuard WP Plugin | 1.8.7 | yes |
+| TS Webfonts for SAKURA RS | 3.1.4 | yes |
+| WP Multibyte Patch | 2.9.3 | no |
+| zipaddr-jp | 1.43 | no |
+
+### Backups Created
+
+Updated plugins were backed up under `/usr/home/ai119lrhtx/html/_codex_update_backups/` before replacement. New backup names created during this pass include:
+
+- `20260714-090812-advanced-custom-fields`
+- `20260714-090822-akismet`
+- `20260714-090835-all-in-one-wp-migration`
+- `20260714-090848-classic-editor`
+- `20260714-090857-duplicate-post`
+- `20260714-090906-easy-fancybox`
+- `20260714-090915-limit-login-attempts`
+- `20260714-090923-raw-html`
+- `20260714-090933-siteguard`
+- `20260714-090941-wp-multibyte-patch`
+- `20260714-090950-zipaddr-jp`
+
+Plugins newly added to staging did not have previous staging directories to back up.
+
+### Plugin Update QA
+
+Each plugin install/update was followed by public smoke checks. Final checks returned 200:
+
+- `/`
+- `/profile/`
+- `/office/`
+- `/light/`
+- `/design/`
+- `/etc/`
+- `/guide/`
+- `/links/`
+- `/privacy/`
+- `/information/?cat=1`
+- `/recruit/`
+- `/cms/login_z76c9dmu`
+- `/wp-json/wp/v2/pages/58`
+- `/wp-json/contact-form-7/v1`
+
+After the final checks, the staging error log had no new `Tue Jul 14 09:1` entries.
+
+Note: an earlier activation attempt logged temporary `copy_dir()` redeclare fatals from the Codex maintenance script itself. The script was fixed by renaming the helper to `codex_copy_dir()`, the failed activations were retried, and the plugins activated successfully.

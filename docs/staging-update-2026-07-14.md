@@ -587,4 +587,18 @@ Browser layout checks:
 - 390px mobile: no document or text horizontal overflow
 - 1280px desktop: no document or text horizontal overflow
 
+Follow-up layout adjustment:
+
+- removed forced heading line breaks from the fixed page content
+- tightened page-specific heading, paragraph, and list spacing
+- adjusted the staging footer to render the three footer links as equal-width columns on desktop
+- preserved stacked footer links on mobile
+- cleared Autoptimize CSS cache after the staging CSS update
+
+Follow-up public checks returned 200 and did not show PHP `Fatal error`, `Parse error`, `Warning:`, `Notice:`, or `Deprecated:` text:
+
+- `/`
+- `/privacy/`
+- `/customer-harassment-policy/`
+
 Screenshots were saved under `work/screenshots/` for the staging customer harassment policy page.

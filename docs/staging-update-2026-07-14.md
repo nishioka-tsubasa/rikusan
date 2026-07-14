@@ -359,3 +359,44 @@ Each plugin install/update was followed by public smoke checks. Final checks ret
 After the final checks, the staging error log had no new `Tue Jul 14 09:1` entries.
 
 Note: an earlier activation attempt logged temporary `copy_dir()` redeclare fatals from the Codex maintenance script itself. The script was fixed by renaming the helper to `codex_copy_dir()`, the failed activations were retried, and the plugins activated successfully.
+
+## Follow-up: Top Page NEWS Layout Fix
+
+Date: 2026-07-14 JST
+
+After replacing the old What's New Generator plugin with the MU shortcode replacement, the top page NEWS list rendered without the original plugin stylesheet. The shortcode output was present, but the date/title rows lost the original compact centered layout.
+
+File changed on staging:
+
+- `/html/cms/wp-content/mu-plugins/codex-showwhatsnew.php`
+
+Backup created before the change:
+
+- `/usr/home/ai119lrhtx/html/_codex_update_backups/20260714-news-layout-codex-showwhatsnew-before.php`
+
+### Fix
+
+The MU shortcode plugin now enqueues a small inline stylesheet matching the original `whats-new.css` layout rules:
+
+- center the NEWS rows at `60%` width on desktop
+- float the date column on desktop
+- hide the separator `hr` elements
+- keep white text/link behavior consistent with the original plugin
+
+### NEWS Layout QA
+
+Browser rendering on the staging top page confirmed:
+
+- `.pc-top .whatsnew dl` computed width: `768px` at the default `1280px` viewport
+- `.pc-top .whatsnew dl` margins: `256px` left and right
+- `.pc-top .whatsnew dt` computed float: `left`
+- date and title rows render horizontally in the compact centered layout again
+
+Additional checks:
+
+- `codex-showwhatsnew.php` passed PHP syntax check
+- the staging top page includes `codex-showwhatsnew-inline-css`
+- public smoke checks returned 200 for `/`, `/light/`, `/design/`, `/etc/`, `/recruit/`, `/profile/`, `/office/`, and `/information?cat=1`
+- no PHP `Fatal error`, `Parse error`, `Warning:`, `Notice:`, or `Deprecated:` text appeared in the checked page bodies
+
+The existing staging error log still contains older entries from before the prior warning fixes and temporary maintenance-script activation attempts, but the current theme files contain the fixed quoted array keys and the NEWS layout change did not introduce visible PHP errors during QA.

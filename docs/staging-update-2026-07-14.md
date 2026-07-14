@@ -601,6 +601,12 @@ Second follow-up layout adjustment:
 - constrained the desktop footer link group to a centered `960px` maximum width so the three links do not spread across the full viewport
 - preserved the mobile footer stacked layout
 
+Third follow-up footer adjustment:
+
+- changed the desktop footer links from equal-width columns to content-width links
+- centered the footer link row and set a fixed `4em` gap between links
+- verified the desktop visible gap between adjacent footer links is about `47px`
+
 Follow-up public checks returned 200 and did not show PHP `Fatal error`, `Parse error`, `Warning:`, `Notice:`, or `Deprecated:` text:
 
 - `/`

@@ -518,3 +518,55 @@ The production top page confirmed:
 A 1280px-wide browser screenshot confirmed the NEWS layout renders as the compact centered date/title list. The direct FTP existence check confirmed the temporary production maintenance script was deleted after use.
 
 The latest available production error log inspected after deployment did not show new PHP fatal or warning entries related to the update.
+
+## Production Content Update: Customer Harassment Policy
+
+Date: 2026-07-14 JST
+Target: https://rikusan.com/customer-harassment-policy/
+
+The supplied Word document was converted into a normal WordPress fixed page. No custom page template was created.
+
+### Page Created
+
+- Title: `カスタマーハラスメントに対する基本方針`
+- Slug: `customer-harassment-policy`
+- URL: `https://rikusan.com/customer-harassment-policy/`
+- WordPress page ID: `1331`
+
+The page content was structured with normal page HTML:
+
+- introductory paragraphs
+- section headings for items 1 through 5
+- bullet lists for example behaviors and company initiatives
+- closing company name
+
+### Footer Link
+
+The active theme footer was hardcoded in `footer.php`, so it was not controlled by a WordPress menu. A minimal footer link was added to the existing footer link area:
+
+- Link text: `カスタマーハラスメント基本方針`
+- Link URL: `/customer-harassment-policy/`
+
+Footer link wrapping was checked visually. Because adding a third footer link caused the existing link area to wrap at desktop width, a small footer-only CSS adjustment was added to keep the desktop footer links on one line and stack them on narrow screens.
+
+Files changed on production:
+
+- `/home/rikusan/www/cms/wp-content/themes/tracks/footer.php`
+- `/home/rikusan/www/cms/wp-content/themes/tracks/style.css`
+
+Backups created before changes:
+
+- `/home/rikusan/www/_codex_update_backups/20260714-customer-harassment-footer-before.php`
+- `/home/rikusan/www/_codex_update_backups/20260714-customer-harassment-style-before.css`
+
+The temporary page-creation script was removed after use.
+
+### QA
+
+Final checks returned 200 and did not show PHP `Fatal error`, `Parse error`, `Warning:`, `Notice:`, or `Deprecated:` text:
+
+- `/`
+- `/customer-harassment-policy/`
+- `/privacy/`
+
+The footer link appears on checked pages, and a 1280px-wide browser screenshot confirmed the footer links render in a clean single row on desktop.

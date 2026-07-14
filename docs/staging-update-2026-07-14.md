@@ -400,3 +400,121 @@ Additional checks:
 - no PHP `Fatal error`, `Parse error`, `Warning:`, `Notice:`, or `Deprecated:` text appeared in the checked page bodies
 
 The existing staging error log still contains older entries from before the prior warning fixes and temporary maintenance-script activation attempts, but the current theme files contain the fixed quoted array keys and the NEWS layout change did not introduce visible PHP errors during QA.
+
+## Production Deployment
+
+Date: 2026-07-14 JST
+Target: https://rikusan.com/
+
+The staging-tested update set was applied to production after the user confirmed production deployment.
+
+### Production State Before
+
+- PHP: `7.4.33`
+- WordPress core: `5.0.22`
+- Contact Form 7: `5.1.9`
+- MetaSlider: `3.10.2`
+- MW WP Form: `5.0.3`
+- What's New Generator: active
+
+### Production Changes Applied
+
+- Updated WordPress core to `7.0.1`
+- Ran the WordPress database upgrade
+- Updated plugins to the selected PHP `7.4`-compatible versions used during staging validation
+- Uploaded the NEWS MU shortcode compatibility plugin:
+  - `/home/rikusan/www/cms/wp-content/mu-plugins/codex-showwhatsnew.php`
+- Deactivated and file-disabled the old What's New Generator plugin
+- Preserved production active-plugin state except for removing What's New Generator
+- Confirmed the customized Tracks theme already had the quoted `['id']` PHP warning fix, so no additional theme upload was needed
+- Removed the temporary production maintenance script after the work
+
+### Production Backups Created
+
+Backups were created under:
+
+- `/home/rikusan/www/_codex_update_backups/`
+
+Key backup names created during the production deployment include:
+
+- `20260714-025621-wp-admin`
+- `20260714-025621-wp-includes`
+- `20260714-025734-advanced-custom-fields`
+- `20260714-025737-akismet`
+- `20260714-025740-all-in-one-wp-migration`
+- `20260714-025745-all-in-one-wp-security-and-firewall`
+- `20260714-025748-autoptimize`
+- `20260714-025749-classic-editor`
+- `20260714-025752-contact-form-7`
+- `20260714-025753-disable-google-fonts`
+- `20260714-025755-duplicate-post`
+- `20260714-025758-easy-fancybox`
+- `20260714-025800-imagemagick-engine`
+- `20260714-025802-invisible-recaptcha`
+- `20260714-025804-limit-login-attempts`
+- `20260714-025814-ml-slider`
+- `20260714-025828-mw-wp-form`
+- `20260714-025831-protect-uploads`
+- `20260714-025832-raw-html`
+- `20260714-025834-remove-query-strings-from-static-resources`
+- `20260714-025836-sakura-rs-wp-ssl`
+- `20260714-025840-siteguard`
+- `20260714-025842-ts-webfonts-for-sakura`
+- `20260714-025844-wp-multibyte-patch`
+- `20260714-025846-zipaddr-jp`
+- `20260714-025908-whats-new-genarator`
+
+The All-in-One WP Migration `storage` directory was restored into the updated plugin directory after replacement.
+
+### Production State After
+
+| Component | Final production state |
+|---|---:|
+| PHP | 7.4.33 |
+| WordPress core | 7.0.1 |
+| Contact Form 7 | 6.1.6 |
+| MetaSlider | 3.110.0 |
+| MW WP Form | 5.0.4 |
+| What's New Generator | disabled and moved to backup |
+| NEWS compatibility MU plugin | active |
+
+Final active plugins on production:
+
+- Advanced Custom Fields
+- All-in-One WP Migration
+- Classic Editor
+- Contact Form 7
+- Duplicate Post
+- Invisible reCaptcha
+- Limit Login Attempts
+- MetaSlider
+- MW WP Form
+- Raw HTML
+- SiteGuard WP Plugin
+
+### Production QA
+
+Final public checks returned 200 and did not show PHP `Fatal error`, `Parse error`, `Warning:`, `Notice:`, or `Deprecated:` text:
+
+- `/`
+- `/light/`
+- `/design/`
+- `/etc/`
+- `/recruit/`
+- `/profile/`
+- `/office/`
+- `/information?cat=1`
+- `/wp-json/wp/v2/pages/58`
+- `/wp-json/contact-form-7/v1`
+
+The production top page confirmed:
+
+- generator tag reports `WordPress 7.0.1`
+- Contact Form 7 assets load with `ver=6.1.6`
+- MetaSlider markup reports `ml-slider-3-110-0`
+- `codex-showwhatsnew-inline-css` is present
+- the old `whats-new-genarator` plugin no longer appears in the top page output
+
+A 1280px-wide browser screenshot confirmed the NEWS layout renders as the compact centered date/title list. The direct FTP existence check confirmed the temporary production maintenance script was deleted after use.
+
+The latest available production error log inspected after deployment did not show new PHP fatal or warning entries related to the update.

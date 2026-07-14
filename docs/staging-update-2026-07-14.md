@@ -595,6 +595,12 @@ Follow-up layout adjustment:
 - preserved stacked footer links on mobile
 - cleared Autoptimize CSS cache after the staging CSS update
 
+Second follow-up layout adjustment:
+
+- reduced the top whitespace before the customer harassment policy heading
+- constrained the desktop footer link group to a centered `960px` maximum width so the three links do not spread across the full viewport
+- preserved the mobile footer stacked layout
+
 Follow-up public checks returned 200 and did not show PHP `Fatal error`, `Parse error`, `Warning:`, `Notice:`, or `Deprecated:` text:
 
 - `/`

@@ -519,54 +519,72 @@ A 1280px-wide browser screenshot confirmed the NEWS layout renders as the compac
 
 The latest available production error log inspected after deployment did not show new PHP fatal or warning entries related to the update.
 
-## Production Content Update: Customer Harassment Policy
+## Customer Harassment Policy: Staging Only
 
 Date: 2026-07-14 JST
-Target: https://rikusan.com/customer-harassment-policy/
+Target: http://rikusan.3d-showcase.net/customer-harassment-policy/
 
-The supplied Word document was converted into a normal WordPress fixed page. No custom page template was created.
+The supplied Word document was converted into a normal WordPress fixed page on staging. No custom page template was created.
 
-### Page Created
+### Production Rollback
+
+An initial production content update was rolled back after confirming that production should not be changed before staging approval.
+
+Rolled back on production:
+
+- page ID `1331` was changed back to `draft`
+- `footer.php` was restored from `/home/rikusan/www/_codex_update_backups/20260714-customer-harassment-footer-before.php`
+- `style.css` was restored from `/home/rikusan/www/_codex_update_backups/20260714-customer-harassment-style-before.css`
+- the temporary production page-creation script was removed
+
+After rollback, production no longer shows the `customer-harassment-policy` footer link.
+
+### Staging Page
 
 - Title: `カスタマーハラスメントに対する基本方針`
 - Slug: `customer-harassment-policy`
-- URL: `https://rikusan.com/customer-harassment-policy/`
-- WordPress page ID: `1331`
+- URL: `http://rikusan.3d-showcase.net/customer-harassment-policy/`
+- WordPress page ID: `1003`
 
-The page content was structured with normal page HTML:
+The staging page was rebuilt using the privacy policy page layout as the base:
 
-- introductory paragraphs
+- `rikusan-guide privacy` content wrapper
+- green underlined page heading
 - section headings for items 1 through 5
-- bullet lists for example behaviors and company initiatives
-- closing company name
+- list styling aligned with the privacy policy page
+- page-scoped responsive CSS in the fixed-page content to prevent mobile text clipping
 
-### Footer Link
+### Staging Footer Link
 
-The active theme footer was hardcoded in `footer.php`, so it was not controlled by a WordPress menu. A minimal footer link was added to the existing footer link area:
+The staging active theme footer is hardcoded in `footer.php`, so it is not controlled by a WordPress menu. A minimal footer link was added on staging only:
 
 - Link text: `カスタマーハラスメント基本方針`
 - Link URL: `/customer-harassment-policy/`
 
-Footer link wrapping was checked visually. Because adding a third footer link caused the existing link area to wrap at desktop width, a small footer-only CSS adjustment was added to keep the desktop footer links on one line and stack them on narrow screens.
+Staging files changed:
 
-Files changed on production:
+- `/html/cms/wp-content/themes/tracks/footer.php`
+- `/html/cms/wp-content/themes/tracks/style.css`
 
-- `/home/rikusan/www/cms/wp-content/themes/tracks/footer.php`
-- `/home/rikusan/www/cms/wp-content/themes/tracks/style.css`
+Staging backups created before changes:
 
-Backups created before changes:
+- `/html/_codex_update_backups/20260714-staging-customer-footer-before.php`
+- `/html/_codex_update_backups/20260714-staging-customer-style-before.css`
 
-- `/home/rikusan/www/_codex_update_backups/20260714-customer-harassment-footer-before.php`
-- `/home/rikusan/www/_codex_update_backups/20260714-customer-harassment-style-before.css`
+The temporary staging page-creation script was removed after use.
 
-The temporary page-creation script was removed after use.
+### Staging QA
 
-### QA
-
-Final checks returned 200 and did not show PHP `Fatal error`, `Parse error`, `Warning:`, `Notice:`, or `Deprecated:` text:
+Final public checks returned 200 and did not show PHP `Fatal error`, `Parse error`, `Warning:`, `Notice:`, or `Deprecated:` text:
 
 - `/`
-- `/customer-harassment-policy/`
 - `/privacy/`
+- `/customer-harassment-policy/`
 
-The footer link appears on checked pages, and a 1280px-wide browser screenshot confirmed the footer links render in a clean single row on desktop.
+Browser layout checks:
+
+- 375px mobile: no document or text horizontal overflow
+- 390px mobile: no document or text horizontal overflow
+- 1280px desktop: no document or text horizontal overflow
+
+Screenshots were saved under `work/screenshots/` for the staging customer harassment policy page.
